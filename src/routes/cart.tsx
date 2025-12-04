@@ -1,15 +1,28 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import { useStore } from '@tanstack/react-store'
-import { store, removeFromCart, updateQuantity } from '../lib/store'
+import { store, removeFromCart, updateQuantity, clearCart } from '../lib/store'
 import { Trash2, Plus, Minus } from 'lucide-react'
+import { createOrder } from '../server/orders'
 
 export const Route = createFileRoute('/cart')({
   component: Cart,
 })
 
 function Cart() {
+  const router = useRouter()
   const cartItems = useStore(store, (state) => state.cart.items)
   const total = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
+
+  const handleCheckout = async () => {
+    try {
+      await createOrder({ data: { items: cartItems, total } })
+      clearCart()
+      alert('Order placed successfully!')
+    } catch (error) {
+      console.error('Checkout failed:', error)
+      alert('Failed to place order. Please try again.')
+    }
+  }
 
   return (
     <div className="bg-white">
@@ -124,9 +137,10 @@ function Cart() {
 
             <div className="mt-6">
               <button
-                type="submit"
+                type="button"
                 className="w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={cartItems.length === 0}
+                onClick={handleCheckout}
               >
                 Checkout
               </button>

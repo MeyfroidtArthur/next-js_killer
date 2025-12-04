@@ -66,3 +66,13 @@ export const updateQuantity = (productId: string, quantity: number) => {
     },
   }))
 }
+
+export const clearCart = () => {
+  store.setState((state) => ({
+    ...state,
+    cart: {
+      ...state.cart,
+      items: [],
+    },
+  }))
+}

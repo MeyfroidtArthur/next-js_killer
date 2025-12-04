@@ -34,6 +34,28 @@ async function seed() {
     `)
     console.log('Created products table')
 
+    await db.execute(`
+      CREATE TABLE IF NOT EXISTS orders (
+        id TEXT PRIMARY KEY,
+        total REAL NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `)
+    console.log('Created orders table')
+
+    await db.execute(`
+      CREATE TABLE IF NOT EXISTS order_items (
+        id TEXT PRIMARY KEY,
+        order_id TEXT NOT NULL,
+        product_id TEXT NOT NULL,
+        quantity INTEGER NOT NULL,
+        price REAL NOT NULL,
+        FOREIGN KEY(order_id) REFERENCES orders(id),
+        FOREIGN KEY(product_id) REFERENCES products(id)
+      )
+    `)
+    console.log('Created order_items table')
+
     // Insert data
     for (const product of products) {
       await db.execute({
