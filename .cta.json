@@ -1,0 +1,18 @@
+{
+  "projectName": "next-js_killer",
+  "mode": "file-router",
+  "typescript": true,
+  "tailwind": true,
+  "packageManager": "npm",
+  "addOnOptions": {},
+  "git": true,
+  "version": 1,
+  "framework": "react-cra",
+  "chosenAddOns": [
+    "eslint",
+    "netlify",
+    "start",
+    "tanchat",
+    "store"
+  ]
+}
